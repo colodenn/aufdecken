@@ -25,8 +25,6 @@
     "next-auth": "^4.19.0",
     "radix-ui": "^1.0.1",
     "react": "18.2.0",
-    "react-cytoscapejs": "^2.0.0",
-    "react-digraph": "^8.1.0",
     "react-dom": "18.2.0",
     "reactflow": "^11.5.6",
     "superjson": "1.9.1",
