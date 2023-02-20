@@ -23,6 +23,7 @@ import {
 } from "@radix-ui/react-icons";
 import Image from "next/image";
 import {  useGridStore, useStore } from "@components/dashboard";
+import { Position } from "reactflow";
 
 interface RadixMenuItem {
   label: string;
@@ -93,7 +94,7 @@ const ContextMenu = (props: ContextMenuProps) => {
             id: v4(),
             data: { label: 'test' },
             position: { x: x, y: y },
-            sourcePosition: 'right',
+            sourcePosition: Position.Right,
             type: 'input',
           },
         type: "add"}])
