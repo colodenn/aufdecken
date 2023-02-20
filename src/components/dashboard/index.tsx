@@ -94,7 +94,7 @@ const Dashboard = () => {
   return (
     <>
       <ContextMenu>
-        <div className={"h-full z-0"}>
+        <div className={"h-full z-0 bg-[#fbfbfb7c]"}>
           <ReactFlow          nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -106,6 +106,7 @@ const Dashboard = () => {
             snapGrid={snapGrid}
             defaultViewport={defaultViewport}
             attributionPosition="top-right"
+           
           >
             {gridOn && (
             <Background />
