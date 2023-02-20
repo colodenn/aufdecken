@@ -20,6 +20,7 @@ import {
   MixerHorizontalIcon,
   PersonIcon,
   TransparencyGridIcon,
+  TrashIcon,
 } from "@radix-ui/react-icons";
 import Image from "next/image";
 import {  useGridStore, useStore } from "@components/dashboard";
@@ -40,19 +41,6 @@ interface User {
 type CheckState = boolean | "indeterminate";
 
 
-
-const regionToolMenuItems: RadixMenuItem[] = [
-  {
-    label: "Frame",
-    icon: <FrameIcon className="mr-2 h-3.5 w-3.5" />,
-    shortcut: "⌘+F",
-  },
-  {
-    label: "Crop",
-    icon: <CropIcon className="mr-2 h-3.5 w-3.5" />,
-    shortcut: "⌘+S",
-  },
-];
 
 const users: User[] = [
   {
@@ -77,9 +65,28 @@ const ContextMenu = (props: ContextMenuProps) => {
   const [showGrid, setShowGrid] = useState(false);
   const [showUi, setShowUi] = useState(false);
   const { toggleGrid, gridOn } = useGridStore();
-  const { onNodesChange, nodes } = useStore(); 
+  const { onNodesChange, nodes, removeSelectedNodes, removeSelectedEdges } = useStore(); 
   const [x, setX] = useState(0)
   const [y, setY] = useState(0)
+
+  
+
+const regionToolMenuItems: RadixMenuItem[] = [
+  {
+    label: "Frame",
+    icon: <FrameIcon className="mr-2 h-3.5 w-3.5" />,
+    shortcut: "⌘+F",
+  },
+  {
+    label: "Delete",
+    icon: <TrashIcon className="mr-2 h-3.5 w-3.5" />,
+    shortcut: "Entf",
+    onClickFunction: () => {
+      removeSelectedNodes()
+      removeSelectedEdges()
+    }
+  },
+];
 
 
   const generalMenuItems: RadixMenuItem[] = [
@@ -200,8 +207,8 @@ const ContextMenu = (props: ContextMenuProps) => {
             Region Tools
           </ContextMenuPrimitive.Label>
 
-          {regionToolMenuItems.map(({ label, icon, shortcut }, i) => (
-            <ContextMenuPrimitive.Item
+          {regionToolMenuItems.map(({ label, icon, shortcut, onClickFunction }, i) => (
+            <ContextMenuPrimitive.Item onClick={onClickFunction}
               key={`${label}-${i}`}
               className={clsx(
                 "flex cursor-default select-none items-center rounded-md px-2 py-2 text-xs outline-none",

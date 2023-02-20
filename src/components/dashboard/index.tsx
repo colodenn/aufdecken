@@ -24,7 +24,7 @@ const selector = (state: RFState) => ({
 });
 
 
-const initialEdges = [{ id: '1-2', source: '1', target: '2',    type: 'smoothstep', animated : true }];
+const initialEdges = [{ id: '1-2', source: '1', target: '2', type: 'smoothstep', animated : true, selected: false }];
 
 const initialNodes: Node[] = [
   {
@@ -33,12 +33,15 @@ const initialNodes: Node[] = [
     sourcePosition: Position.Right,
     position: { x: 0, y: 0 },
     type: 'input',
+    selected: false
   },
   {
     id: '2',
     data: { label: 'World' },
     targetPosition:  Position.Left,
     position: { x: 100, y: 100 },
+    selected: false
+
   },
 ];
 interface GridState {
@@ -53,6 +56,8 @@ type RFState = {
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
+  removeSelectedNodes: () => void;
+  removeSelectedEdges: () => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
@@ -74,6 +79,16 @@ export const useStore = create<RFState>((set, get) => ({
       edges: addEdge(connection, get().edges),
     });
   },
+  removeSelectedNodes: () => {
+    set({
+      nodes: get().nodes.filter(node => node.selected == false)
+    })
+  },
+  removeSelectedEdges: () => {
+    set({
+      edges: get().edges.filter(edge => edge.selected == false)
+    })
+  }
 }));
 
 
