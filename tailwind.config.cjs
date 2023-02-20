@@ -4,5 +4,5 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require("tailwindcss-radix")()],
+  plugins: [import("tailwindcss-radix")],
 };
