@@ -9,9 +9,9 @@ type Layout = {
 const Layout: FunctionComponent<Layout> = (props) => {
   return (
     <>
-      <div className="disableScroll h-screen overflow-hidden ">
+      <div className="h-screen w-screen ">
         <Navbar />
-        <div className="items-cent flex w-full">
+        <div className=" flex w-full">
           <Sidebar />
           <main className="w-full">
             <div className="mx-auto h-full w-full flex-1">{props.children}</div>

@@ -9,11 +9,14 @@ const Sidebar = () => {
 
   return (
     <>
+      <div className="" style={{height: "calc(100vh - 69px)"}}>
+
       {sidebarOpen ? (
         <ExpandedMenu setOpen={setSidebarOpen} open={sidebarOpen} />
       ) : (
         <CollapsedMenu setOpen={setSidebarOpen} open={sidebarOpen} />
       )}
+      </div>
     </>
   );
 };
@@ -27,10 +30,10 @@ type SidebarMenu = {
 
 const CollapsedMenu = (props: SidebarMenu) => {
   return (
-    <div className="relative mt-0 h-screen w-16 border-r-[1px] bg-white">
+    <div className="relative mt-0 h-full w-16 border-r-[1px] bg-white">
       <div
         onClick={() => props.setOpen(!props.open)}
-        className="absolute -right-12 top-24 flex h-12 w-12  cursor-pointer   items-center justify-center rounded-r border-[1px] border-l-0 bg-white"
+        className="absolute  z-30 -right-12 top-24 flex h-12 w-12  cursor-pointer   items-center justify-center rounded-r border-[1px] border-l-0 bg-white"
       >
         <DoubleArrowRightIcon className="h-4 w-4" />
       </div>
@@ -45,10 +48,10 @@ const CollapsedMenu = (props: SidebarMenu) => {
 
 const ExpandedMenu = (props: SidebarMenu) => {
   return (
-    <div className="relative mt-0 h-screen w-96 border-r-[1px] bg-white">
+    <div className="relative mt-0 h-full w-96 border-r-[1px] bg-white">
       <div
         onClick={() => props.setOpen(!props.open)}
-        className="absolute -right-12 top-24 flex h-12 w-12  cursor-pointer   items-center justify-center rounded-r border-[1px] border-l-0 bg-white"
+        className="absolute  z-30 -right-12 top-24 flex h-12 w-12  cursor-pointer   items-center justify-center rounded-r border-[1px] border-l-0 bg-white"
       >
         <DoubleArrowLeftIcon className="h-4 w-4" />
       </div>

@@ -1,27 +1,34 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
 import { clsx } from "clsx";
 import type { ReactNode } from "react";
 import React, { useState } from "react";
+import { v4 } from "uuid";
+
 import {
   CaretRightIcon,
   CheckIcon,
   CropIcon,
   EyeClosedIcon,
   EyeOpenIcon,
-  FileIcon,
   FrameIcon,
   GridIcon,
+  LightningBoltIcon,
   Link2Icon,
   MixerHorizontalIcon,
   PersonIcon,
   TransparencyGridIcon,
 } from "@radix-ui/react-icons";
 import Image from "next/image";
+import {  useGridStore, useStore } from "@components/dashboard";
 
 interface RadixMenuItem {
   label: string;
   shortcut?: string;
   icon?: ReactNode;
+  onClickFunction?: () => void;
 }
 
 interface User {
@@ -31,18 +38,7 @@ interface User {
 
 type CheckState = boolean | "indeterminate";
 
-const generalMenuItems: RadixMenuItem[] = [
-  {
-    label: "New File",
-    icon: <FileIcon className="mr-2 h-3.5 w-3.5" />,
-    shortcut: "⌘+N",
-  },
-  {
-    label: "Settings",
-    icon: <MixerHorizontalIcon className="mr-2 h-3.5 w-3.5" />,
-    shortcut: "⌘+,",
-  },
-];
+
 
 const regionToolMenuItems: RadixMenuItem[] = [
   {
@@ -79,10 +75,43 @@ interface ContextMenuProps {
 const ContextMenu = (props: ContextMenuProps) => {
   const [showGrid, setShowGrid] = useState(false);
   const [showUi, setShowUi] = useState(false);
+  const { toggleGrid, gridOn } = useGridStore();
+  const { onNodesChange, nodes } = useStore(); 
+  const [x, setX] = useState(0)
+  const [y, setY] = useState(0)
+
+
+  const generalMenuItems: RadixMenuItem[] = [
+    {
+      label: "New Activity",
+      icon: <LightningBoltIcon className="mr-2 h-3.5 w-3.5" />,
+      shortcut: "⌘+N",
+      onClickFunction: () => {
+  
+        onNodesChange([{
+          item:   {
+            id: v4(),
+            data: { label: 'test' },
+            position: { x: x, y: y },
+            sourcePosition: 'right',
+            type: 'input',
+          },
+        type: "add"}])
+      } 
+    },
+    {
+      label: "Settings",
+      icon: <MixerHorizontalIcon className="mr-2 h-3.5 w-3.5" />,
+      shortcut: "⌘+,",
+    },
+    ];
 
   return (
     <ContextMenuPrimitive.Root>
-      <ContextMenuPrimitive.Trigger asChild>
+      <ContextMenuPrimitive.Trigger asChild onContextMenu={(e: any) => {
+        setX(e.clientX);
+        setY(e.clientY);
+      }} >
         {props.children}
       </ContextMenuPrimitive.Trigger>
 
@@ -94,13 +123,14 @@ const ContextMenu = (props: ContextMenuProps) => {
             "bg-white dark:bg-gray-800"
           )}
         >
-          {generalMenuItems.map(({ label, icon, shortcut }, i) => (
+          {generalMenuItems.map(({ label, icon, shortcut, onClickFunction }, i) => (
             <ContextMenuPrimitive.Item
               key={`${label}-${i}`}
               className={clsx(
                 "flex cursor-default select-none items-center rounded-md px-2 py-2 text-xs outline-none",
                 "text-gray-400 focus:bg-gray-50 dark:text-gray-500 dark:focus:bg-gray-900"
               )}
+              onClick={onClickFunction}
             >
               {icon}
               <span className="flex-grow text-gray-700 dark:text-gray-300">
@@ -113,7 +143,8 @@ const ContextMenu = (props: ContextMenuProps) => {
           <ContextMenuPrimitive.Separator className="my-1 h-px bg-gray-200 dark:bg-gray-700" />
 
           <ContextMenuPrimitive.CheckboxItem
-            checked={showGrid}
+            onClick={() => toggleGrid()}
+            checked={gridOn}
             onCheckedChange={(state: CheckState) => {
               if (state !== "indeterminate") {
                 setShowGrid(state);
@@ -124,7 +155,7 @@ const ContextMenu = (props: ContextMenuProps) => {
               "text-gray-400 focus:bg-gray-50 dark:text-gray-500 dark:focus:bg-gray-900"
             )}
           >
-            {showGrid ? (
+            {gridOn ? (
               <GridIcon className="mr-2 h-4 w-4" />
             ) : (
               <TransparencyGridIcon className="mr-2 h-3.5 w-3.5 text-gray-700 dark:text-gray-300" />

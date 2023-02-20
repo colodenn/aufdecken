@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Navbar = () => {
   return (
-    <nav className="z-50 w-screen border-b-[1px] bg-white py-3 px-4">
+    <nav className="z-50 w-full border-b-[1px] bg-white py-3 px-4">
       <div className="my-auto flex justify-between">
         <div className="flex items-center">
           <div className="mr-4 inline-block cursor-pointer">
