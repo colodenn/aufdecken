@@ -1,7 +1,7 @@
 import ContextMenu from "@components/contextMenu";
 import { create } from "zustand";
 
-import ReactFlow, { Background, Controls, MiniMap, addEdge, applyEdgeChanges, applyNodeChanges,Node } from 'reactflow';
+import ReactFlow, { Background, Controls, MiniMap, addEdge, applyEdgeChanges, applyNodeChanges, Position } from 'reactflow';
 import type {
   Connection,
   Edge,
@@ -9,13 +9,13 @@ import type {
   NodeChange,
   OnNodesChange,
   OnEdgesChange,
-  OnConnect} from 'reactflow';
+  OnConnect,Node} from 'reactflow';
 
 
 import 'reactflow/dist/style.css';
 import { shallow } from 'zustand/shallow';
 
-const selector = (state) => ({
+const selector = (state: RFState) => ({
   nodes: state.nodes,
   edges: state.edges,
   onNodesChange: state.onNodesChange,
@@ -30,14 +30,14 @@ const initialNodes: Node[] = [
   {
     id: '1',
     data: { label: 'Hello' },
-    sourcePosition: 'right',
+    sourcePosition: Position.Right,
     position: { x: 0, y: 0 },
     type: 'input',
   },
   {
     id: '2',
     data: { label: 'World' },
-    targetPosition: 'left',
+    targetPosition:  Position.Left,
     position: { x: 100, y: 100 },
   },
 ];
@@ -89,7 +89,7 @@ const Dashboard = () => {
   
 
   
-  const snapGrid = [20, 20];
+  const snapGrid: [number, number] = [20, 20];
   const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
   return (
     <>
@@ -125,20 +125,3 @@ const Dashboard = () => {
 export default Dashboard;
 
 
-export type Node = {
-  id: number,
-  successors?: number[],
-  pos: {x: number, y: number}
-}
-
-const Node = (props: Node) => {
-  return (
-    
-      <div className="bg-white w-48 rounded cursor-pointer shadow-sm p-6 absolute" style={{left: props.pos.x, top: props.pos.y}}>
-        <p>Start</p>
-
-        <p>{props.id}</p>
-    </div>
-  
-  )
-}
