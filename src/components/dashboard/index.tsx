@@ -46,8 +46,11 @@ const Flow = () => {
       attributionPosition="top-right"
       onPaneContextMenu={(e: React.MouseEvent) => {
         const bounds = reactFlowRef?.current?.getBoundingClientRect();
-        const coords = reactFlowInstance.project({ x: e.clientX - bounds.left, y: e.clientY - bounds.top })
-        updateMousePosition(coords)
+        if (typeof bounds !== "undefined") {
+          const coords = reactFlowInstance.project({ x: e.clientX - bounds.left, y: e.clientY - bounds.top })
+
+          updateMousePosition(coords)
+        }
       }
       }
 
