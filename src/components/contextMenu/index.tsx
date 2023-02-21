@@ -22,7 +22,7 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 import Image from "next/image";
-import { useGridStore, useStore } from "@components/dashboard";
+import { useGridStore, useGraphStore } from "@components/dashboard";
 import { Position } from "reactflow";
 
 interface RadixMenuItem {
@@ -64,7 +64,7 @@ const ContextMenu = (props: ContextMenuProps) => {
   const [showGrid, setShowGrid] = useState(false);
   const [showUi, setShowUi] = useState(false);
   const { toggleGrid, gridOn } = useGridStore();
-  const { onNodesChange, nodes, removeSelectedNodes, removeSelectedEdges } = useStore();
+  const { onNodesChange, nodes, removeSelectedNodes, removeSelectedEdges } = useGraphStore();
   const [x, setX] = useState(0)
   const [y, setY] = useState(0)
 

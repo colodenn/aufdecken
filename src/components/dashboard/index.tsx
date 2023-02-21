@@ -59,10 +59,11 @@ type RFState = {
   onConnect: OnConnect;
   removeSelectedNodes: () => void;
   removeSelectedEdges: () => void;
+  removeAllNodesEdges: () => void;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
-export const useStore = create<RFState>((set, get) => ({
+export const useGraphStore = create<RFState>((set, get) => ({
   nodes: initialNodes,
   edges: initialEdges,
   onNodesChange: (changes: NodeChange[]) => {
@@ -89,6 +90,12 @@ export const useStore = create<RFState>((set, get) => ({
     set({
       edges: get().edges.filter(edge => edge.selected == false)
     })
+  },
+  removeAllNodesEdges: () => {
+    set({
+      edges: [],
+      nodes: []
+    })
   }
 }));
 
@@ -99,7 +106,7 @@ export const useGridStore = create<GridState>()((set) => ({
 }))
 
 const Dashboard = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selector, shallow);
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useGraphStore(selector, shallow);
   const { gridOn } = useGridStore();
 
   const snapGrid: [number, number] = [20, 20];

@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useGraphStore } from "..";
 
 const Navbar = () => {
+  const { removeAllNodesEdges } = useGraphStore();
   return (
     <nav className="z-50 w-full border-b-[1px] bg-white py-3 px-4">
       <div className="my-auto flex justify-between">
@@ -34,7 +36,9 @@ const Navbar = () => {
           <p className="m-auto font-medium ">MobIS 2019</p>
         </div>
         <div className="flex items-center space-x-4">
-          <button className="rounded  border px-2 py-2 text-sm font-medium  text-gray-400 hover:border-gray-100 hover:text-gray-300 focus:outline-none ">
+          <button className="rounded  border px-2 py-2 text-sm font-medium  text-gray-400 hover:border-gray-100 hover:text-gray-300 focus:outline-none "
+            onClick={() => removeAllNodesEdges()}
+          >
             Discard
           </button>
           <button className="rounded bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-400 focus:outline-none">
