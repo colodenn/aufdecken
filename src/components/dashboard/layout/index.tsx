@@ -2,7 +2,7 @@ import React, { type FunctionComponent } from "react";
 import Navbar from "./navbar";
 import Sidebar from "./sidebar";
 
-type Layout = {
+export type Layout = {
   children: React.ReactNode;
 };
 
