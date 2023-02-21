@@ -27,7 +27,7 @@ const Dashboard = () => {
 const Flow = () => {
   const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useGraphStore(selector, shallow);
   const { gridOn } = useGridStore();
-  const reactFlowRef = useRef();
+  const reactFlowRef = useRef<HTMLDivElement | null>(null);
   const reactFlowInstance = useReactFlow();
   const { updateMousePosition } = useMousePositionStore();
   const snapGrid: [number, number] = [20, 20];
@@ -44,8 +44,8 @@ const Flow = () => {
       snapGrid={snapGrid}
       defaultViewport={defaultViewport}
       attributionPosition="top-right"
-      onPaneContextMenu={(e: any) => {
-        const bounds = reactFlowRef.current.getBoundingClientRect();
+      onPaneContextMenu={(e: React.MouseEvent) => {
+        const bounds = reactFlowRef?.current?.getBoundingClientRect();
         const coords = reactFlowInstance.project({ x: e.clientX - bounds.left, y: e.clientY - bounds.top })
         updateMousePosition(coords)
       }
