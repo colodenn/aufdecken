@@ -10,5 +10,10 @@
 
 .backgroundGrid {
   background-image: url("/layout/tile.png");
+}
 
+.dotted {
+  background: linear-gradient(90deg, #fff 21px, transparent 1%) 50%,
+    linear-gradient(#fff 21px, transparent 1%) 50%, gray;
+  background-size: 22px 22px;
 }

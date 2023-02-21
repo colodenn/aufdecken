@@ -9,7 +9,8 @@ import type {
   NodeChange,
   OnNodesChange,
   OnEdgesChange,
-  OnConnect,Node} from 'reactflow';
+  OnConnect, Node
+} from 'reactflow';
 
 
 import 'reactflow/dist/style.css';
@@ -24,7 +25,7 @@ const selector = (state: RFState) => ({
 });
 
 
-const initialEdges = [{ id: '1-2', source: '1', target: '2', type: 'smoothstep', animated : true, selected: false }];
+const initialEdges = [{ id: '1-2', source: '1', target: '2', type: 'smoothstep', animated: true, selected: false }];
 
 const initialNodes: Node[] = [
   {
@@ -38,7 +39,7 @@ const initialNodes: Node[] = [
   {
     id: '2',
     data: { label: 'World' },
-    targetPosition:  Position.Left,
+    targetPosition: Position.Left,
     position: { x: 100, y: 100 },
     selected: false
 
@@ -99,38 +100,35 @@ export const useGridStore = create<GridState>()((set) => ({
 
 const Dashboard = () => {
   const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selector, shallow);
-  // const { nodes } = useGraphStore();
   const { gridOn } = useGridStore();
-  
 
-  
   const snapGrid: [number, number] = [20, 20];
   const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
   return (
     <>
       <ContextMenu>
         <div className={"h-full z-0 bg-[#fbfbfb7c]"}>
-          <ReactFlow          nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
+          <ReactFlow nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             deleteKeyCode="Delete"
-        fitView
+            fitView
             snapToGrid={true}
             snapGrid={snapGrid}
             defaultViewport={defaultViewport}
             attributionPosition="top-right"
-           
+
           >
             {gridOn && (
-            <Background />
+              <Background />
             )}
             <Controls />
             <MiniMap zoomable pannable />
 
-      </ReactFlow>
-      </div>
+          </ReactFlow>
+        </div>
       </ContextMenu>
     </>
   );

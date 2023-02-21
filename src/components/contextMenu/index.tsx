@@ -10,7 +10,6 @@ import { v4 } from "uuid";
 import {
   CaretRightIcon,
   CheckIcon,
-  CropIcon,
   EyeClosedIcon,
   EyeOpenIcon,
   FrameIcon,
@@ -23,7 +22,7 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 import Image from "next/image";
-import {  useGridStore, useStore } from "@components/dashboard";
+import { useGridStore, useStore } from "@components/dashboard";
 import { Position } from "reactflow";
 
 interface RadixMenuItem {
@@ -65,28 +64,28 @@ const ContextMenu = (props: ContextMenuProps) => {
   const [showGrid, setShowGrid] = useState(false);
   const [showUi, setShowUi] = useState(false);
   const { toggleGrid, gridOn } = useGridStore();
-  const { onNodesChange, nodes, removeSelectedNodes, removeSelectedEdges } = useStore(); 
+  const { onNodesChange, nodes, removeSelectedNodes, removeSelectedEdges } = useStore();
   const [x, setX] = useState(0)
   const [y, setY] = useState(0)
 
-  
 
-const regionToolMenuItems: RadixMenuItem[] = [
-  {
-    label: "Frame",
-    icon: <FrameIcon className="mr-2 h-3.5 w-3.5" />,
-    shortcut: "⌘+F",
-  },
-  {
-    label: "Delete",
-    icon: <TrashIcon className="mr-2 h-3.5 w-3.5" />,
-    shortcut: "Entf",
-    onClickFunction: () => {
-      removeSelectedNodes()
-      removeSelectedEdges()
-    }
-  },
-];
+
+  const regionToolMenuItems: RadixMenuItem[] = [
+    {
+      label: "Frame",
+      icon: <FrameIcon className="mr-2 h-3.5 w-3.5" />,
+      shortcut: "⌘+F",
+    },
+    {
+      label: "Delete",
+      icon: <TrashIcon className="mr-2 h-3.5 w-3.5" />,
+      shortcut: "Entf",
+      onClickFunction: () => {
+        removeSelectedNodes()
+        removeSelectedEdges()
+      }
+    },
+  ];
 
 
   const generalMenuItems: RadixMenuItem[] = [
@@ -95,24 +94,25 @@ const regionToolMenuItems: RadixMenuItem[] = [
       icon: <LightningBoltIcon className="mr-2 h-3.5 w-3.5" />,
       shortcut: "⌘+N",
       onClickFunction: () => {
-  
+
         onNodesChange([{
-          item:   {
+          item: {
             id: v4(),
             data: { label: 'test' },
             position: { x: x, y: y },
             sourcePosition: Position.Right,
             type: 'input',
           },
-        type: "add"}])
-      } 
+          type: "add"
+        }])
+      }
     },
     {
       label: "Settings",
       icon: <MixerHorizontalIcon className="mr-2 h-3.5 w-3.5" />,
       shortcut: "⌘+,",
     },
-    ];
+  ];
 
   return (
     <ContextMenuPrimitive.Root>
