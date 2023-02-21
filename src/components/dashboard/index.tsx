@@ -1,10 +1,11 @@
 import ContextMenu from "@components/contextMenu";
-import ReactFlow, { Background, Controls, MiniMap, useReactFlow, ReactFlowProvider } from 'reactflow';
+import ReactFlow, { Background, Controls, MiniMap, useReactFlow, ReactFlowProvider, SmoothStepEdge, StraightEdge, StepEdge } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { shallow } from 'zustand/shallow';
 import { useRef } from "react";
 import { selector, useGraphStore, useGridStore } from "../../stores/store";
 import { useMousePositionStore } from "../../stores/mousePos";
+import SmartBezierEdge, { SmartStepEdge } from "@tisoap/react-flow-smart-edge";
 
 
 
@@ -23,7 +24,9 @@ const Dashboard = () => {
   );
 
 };
-
+// const smart = {
+//   smart: SmartStepEdge
+// }
 const Flow = () => {
   const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useGraphStore(selector, shallow);
   const { gridOn } = useGridStore();
@@ -32,12 +35,15 @@ const Flow = () => {
   const { updateMousePosition } = useMousePositionStore();
   const snapGrid: [number, number] = [20, 20];
   const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
+
   return (
     <ReactFlow nodes={nodes} ref={reactFlowRef}
       edges={edges}
+
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
+      // edgeTypes={smart}
       deleteKeyCode="Delete"
       fitView
       snapToGrid={true}

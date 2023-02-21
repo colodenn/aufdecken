@@ -1,5 +1,6 @@
 import React, { type FunctionComponent } from "react";
 import Navbar from "./navbar";
+import SettingsBar from "./settingsBar";
 import Sidebar from "./sidebar";
 
 export type Layout = {
@@ -7,6 +8,8 @@ export type Layout = {
 };
 
 const Layout: FunctionComponent<Layout> = (props) => {
+
+
   return (
     <>
       <div className="h-screen w-screen ">
@@ -16,6 +19,8 @@ const Layout: FunctionComponent<Layout> = (props) => {
           <main className="w-full">
             <div className="mx-auto h-full w-full flex-1">{props.children}</div>
           </main>
+
+          <SettingsBar />
         </div>
       </div>
     </>

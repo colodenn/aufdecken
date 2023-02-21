@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { shallow } from "zustand/shallow";
-import { selector, useGraphStore } from "../../../stores/store";
+import { useGraphStore } from "../../../stores/store";
 
 const Navbar = () => {
   const { removeAllNodesEdges } = useGraphStore();

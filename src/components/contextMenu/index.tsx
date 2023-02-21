@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
 import { clsx } from "clsx";
 import type { ReactNode } from "react";
@@ -12,25 +9,28 @@ import {
   CheckIcon,
   EyeClosedIcon,
   EyeOpenIcon,
-  FrameIcon,
   GridIcon,
   LightningBoltIcon,
   Link2Icon,
   MixerHorizontalIcon,
   PersonIcon,
+  RulerHorizontalIcon,
   TransparencyGridIcon,
   TrashIcon,
 } from "@radix-ui/react-icons";
 import Image from "next/image";
+import type { NodePositionChange } from "reactflow";
 import { Position } from "reactflow";
-import { useGraphStore, useGridStore } from "../../stores/store";
-import { useMousePositionStore } from "../../stores/mousePos";
+import { useGraphStore, useGridStore } from "@stores/store";
+import { useMousePositionStore } from "@stores/mousePos";
+import { useSettingsbarStore } from "@stores/settingsBar";
+import { sortLayout } from "@utils/graph";
 
 interface RadixMenuItem {
   label: string;
   shortcut?: string;
   icon?: ReactNode;
-  onClickFunction?: () => void;
+  onClickFunction?: () => void | Promise<any>;
 }
 
 interface User {
@@ -66,17 +66,34 @@ const ContextMenu = (props: ContextMenuProps) => {
   const [showGrid, setShowGrid] = useState(false);
   const [showUi, setShowUi] = useState(false);
   const { toggleGrid, gridOn } = useGridStore();
-  const { onNodesChange, removeSelectedNodes, removeSelectedEdges } = useGraphStore();
-
-
+  const { onNodesChange, removeSelectedNodes, removeSelectedEdges, edges, nodes } = useGraphStore();
+  const { toggleSettingsBar } = useSettingsbarStore();
 
 
 
   const regionToolMenuItems: RadixMenuItem[] = [
     {
-      label: "Frame",
-      icon: <FrameIcon className="mr-2 h-3.5 w-3.5" />,
+      label: "Sort",
+      icon: <RulerHorizontalIcon className="mr-2 h-3.5 w-3.5" />,
       shortcut: "⌘+F",
+      onClickFunction: async () => {
+
+        const e = await sortLayout(nodes, edges)
+        if (typeof e !== "undefined" && typeof e.children !== "undefined") {
+
+          const nodechange: NodePositionChange[] = e.children.map((node) => {
+            return {
+              id: node.id,
+              type: "position",
+              position: { x: node.x, y: node.y }
+            } as NodePositionChange
+          })
+          onNodesChange(nodechange)
+        }
+
+
+      }
+
     },
     {
       label: "Delete",
@@ -100,10 +117,11 @@ const ContextMenu = (props: ContextMenuProps) => {
         onNodesChange([{
           item: {
             id: v4(),
-            data: { label: 'test' },
+            data: { label: 'test2' },
             position: { x: pos.x, y: pos.y },
+            targetPosition: Position.Left,
             sourcePosition: Position.Right,
-            type: 'input',
+
           },
           type: "add"
         }])
@@ -113,6 +131,7 @@ const ContextMenu = (props: ContextMenuProps) => {
       label: "Settings",
       icon: <MixerHorizontalIcon className="mr-2 h-3.5 w-3.5" />,
       shortcut: "⌘+,",
+      onClickFunction: () => toggleSettingsBar(true)
     },
   ];
 
