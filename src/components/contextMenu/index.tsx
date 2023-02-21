@@ -22,8 +22,9 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 import Image from "next/image";
-import { useGridStore, useGraphStore } from "@components/dashboard";
 import { Position } from "reactflow";
+import { useGraphStore, useGridStore } from "../../stores/store";
+import { useMousePositionStore } from "../../stores/mousePos";
 
 interface RadixMenuItem {
   label: string;
@@ -61,12 +62,13 @@ interface ContextMenuProps {
 }
 
 const ContextMenu = (props: ContextMenuProps) => {
+  const { pos } = useMousePositionStore();
   const [showGrid, setShowGrid] = useState(false);
   const [showUi, setShowUi] = useState(false);
   const { toggleGrid, gridOn } = useGridStore();
-  const { onNodesChange, nodes, removeSelectedNodes, removeSelectedEdges } = useGraphStore();
-  const [x, setX] = useState(0)
-  const [y, setY] = useState(0)
+  const { onNodesChange, removeSelectedNodes, removeSelectedEdges } = useGraphStore();
+
+
 
 
 
@@ -99,7 +101,7 @@ const ContextMenu = (props: ContextMenuProps) => {
           item: {
             id: v4(),
             data: { label: 'test' },
-            position: { x: x, y: y },
+            position: { x: pos.x, y: pos.y },
             sourcePosition: Position.Right,
             type: 'input',
           },
@@ -116,10 +118,7 @@ const ContextMenu = (props: ContextMenuProps) => {
 
   return (
     <ContextMenuPrimitive.Root>
-      <ContextMenuPrimitive.Trigger asChild onContextMenu={(e: any) => {
-        setX(e.clientX);
-        setY(e.clientY);
-      }} >
+      <ContextMenuPrimitive.Trigger asChild >
         {props.children}
       </ContextMenuPrimitive.Trigger>
 

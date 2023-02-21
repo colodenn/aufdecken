@@ -1,146 +1,68 @@
 import ContextMenu from "@components/contextMenu";
-import { create } from "zustand";
-
-import ReactFlow, { Background, Controls, MiniMap, addEdge, applyEdgeChanges, applyNodeChanges, Position } from 'reactflow';
-import type {
-  Connection,
-  Edge,
-  EdgeChange,
-  NodeChange,
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect, Node
-} from 'reactflow';
-
-
+import ReactFlow, { Background, Controls, MiniMap, useReactFlow, ReactFlowProvider } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { shallow } from 'zustand/shallow';
-
-const selector = (state: RFState) => ({
-  nodes: state.nodes,
-  edges: state.edges,
-  onNodesChange: state.onNodesChange,
-  onEdgesChange: state.onEdgesChange,
-  onConnect: state.onConnect,
-});
+import { useRef } from "react";
+import { selector, useGraphStore, useGridStore } from "../../stores/store";
+import { useMousePositionStore } from "../../stores/mousePos";
 
 
-const initialEdges = [{ id: '1-2', source: '1', target: '2', type: 'smoothstep', animated: true, selected: false }];
-
-const initialNodes: Node[] = [
-  {
-    id: '1',
-    data: { label: 'Hello' },
-    sourcePosition: Position.Right,
-    position: { x: 0, y: 0 },
-    type: 'input',
-    selected: false
-  },
-  {
-    id: '2',
-    data: { label: 'World' },
-    targetPosition: Position.Left,
-    position: { x: 100, y: 100 },
-    selected: false
-
-  },
-];
-interface GridState {
-  gridOn: boolean,
-  toggleGrid: () => void
-}
-
-
-type RFState = {
-  nodes: Node[];
-  edges: Edge[];
-  onNodesChange: OnNodesChange;
-  onEdgesChange: OnEdgesChange;
-  onConnect: OnConnect;
-  removeSelectedNodes: () => void;
-  removeSelectedEdges: () => void;
-  removeAllNodesEdges: () => void;
-};
-
-// this is our useStore hook that we can use in our components to get parts of the store and call actions
-export const useGraphStore = create<RFState>((set, get) => ({
-  nodes: initialNodes,
-  edges: initialEdges,
-  onNodesChange: (changes: NodeChange[]) => {
-    set({
-      nodes: applyNodeChanges(changes, get().nodes),
-    });
-  },
-  onEdgesChange: (changes: EdgeChange[]) => {
-    set({
-      edges: applyEdgeChanges(changes, get().edges),
-    });
-  },
-  onConnect: (connection: Connection) => {
-    set({
-      edges: addEdge(connection, get().edges),
-    });
-  },
-  removeSelectedNodes: () => {
-    set({
-      nodes: get().nodes.filter(node => node.selected == false)
-    })
-  },
-  removeSelectedEdges: () => {
-    set({
-      edges: get().edges.filter(edge => edge.selected == false)
-    })
-  },
-  removeAllNodesEdges: () => {
-    set({
-      edges: [],
-      nodes: []
-    })
-  }
-}));
-
-
-export const useGridStore = create<GridState>()((set) => ({
-  gridOn: true,
-  toggleGrid: () => set((state) => ({ gridOn: !state.gridOn })),
-}))
 
 const Dashboard = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useGraphStore(selector, shallow);
-  const { gridOn } = useGridStore();
 
-  const snapGrid: [number, number] = [20, 20];
-  const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
   return (
     <>
       <ContextMenu>
         <div className={"h-full z-0 bg-[#fbfbfb7c]"}>
-          <ReactFlow nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            deleteKeyCode="Delete"
-            fitView
-            snapToGrid={true}
-            snapGrid={snapGrid}
-            defaultViewport={defaultViewport}
-            attributionPosition="top-right"
-
-          >
-            {gridOn && (
-              <Background />
-            )}
-            <Controls />
-            <MiniMap zoomable pannable />
-
-          </ReactFlow>
+          <ReactFlowProvider>
+            <Flow />
+          </ReactFlowProvider>
         </div>
       </ContextMenu>
     </>
   );
 
 };
+
+const Flow = () => {
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useGraphStore(selector, shallow);
+  const { gridOn } = useGridStore();
+  const reactFlowRef = useRef();
+  const reactFlowInstance = useReactFlow();
+  const { updateMousePosition } = useMousePositionStore();
+  const snapGrid: [number, number] = [20, 20];
+  const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
+  return (
+    <ReactFlow nodes={nodes} ref={reactFlowRef}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      deleteKeyCode="Delete"
+      fitView
+      snapToGrid={true}
+      snapGrid={snapGrid}
+      defaultViewport={defaultViewport}
+      attributionPosition="top-right"
+      onPaneContextMenu={(e: any) => {
+        const bounds = reactFlowRef.current.getBoundingClientRect();
+        const coords = reactFlowInstance.project({ x: e.clientX - bounds.left, y: e.clientY - bounds.top })
+        updateMousePosition(coords)
+      }
+      }
+
+    >
+
+      {gridOn && (
+        <Background />
+      )}
+      <Controls />
+      <MiniMap zoomable pannable />
+
+    </ReactFlow>
+  )
+}
+
 
 export default Dashboard;
 
