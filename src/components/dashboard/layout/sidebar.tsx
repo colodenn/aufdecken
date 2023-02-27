@@ -125,8 +125,9 @@ const Tabs = () => {
           className="p-4"
         >
           {
-            AI.map((item) => {
-              return <Block title={item.title} description={item.description} />
+            AI.map(( item, index) => {
+
+              return <div key={index}><Block title={item.title} description={item.description} /></div>
             })
           }
         </TabsPrimitive.Content>
