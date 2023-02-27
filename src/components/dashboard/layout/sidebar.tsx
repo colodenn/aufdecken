@@ -148,7 +148,7 @@ const Tabs = () => {
           value={"tab3"}
         >
  {
-            Other.map((item) => {
+            Other.map((item, index) => {
               return <div key={index}><Block title={item.title} description={item.description} /></div>
             })
           }
