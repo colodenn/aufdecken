@@ -137,8 +137,8 @@ const Tabs = () => {
           value={"tab2"}
         >
           {
-            Algorithm.map((item) => {
-              return <Block title={item.title} description={item.description} />
+            Algorithm.map((item, index) => {
+              return <div key={index}><Block title={item.title} description={item.description} /></div>
             })
           }
         </TabsPrimitive.Content>
@@ -149,7 +149,7 @@ const Tabs = () => {
         >
  {
             Other.map((item) => {
-              return <Block title={item.title} description={item.description} />
+              return <div key={index}><Block title={item.title} description={item.description} /></div>
             })
           }
         </TabsPrimitive.Content>
