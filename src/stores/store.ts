@@ -1,4 +1,4 @@
-import { applyNodeChanges, applyEdgeChanges, addEdge, Position } from "reactflow";
+import { applyNodeChanges, applyEdgeChanges, addEdge, Position, MarkerType } from "reactflow";
 import { create } from "zustand";
 import type { Node , NodeChange, EdgeChange, Connection, Edge, OnNodesChange, OnEdgesChange, OnConnect} from "reactflow"
 
@@ -10,22 +10,50 @@ export const selector = (state: RFState) => ({
     onConnect: state.onConnect,
   });
 
-const initialEdges = [{ id: '1-2', source: '1', target: '2', type: 'smoothstep', animated: true, selected: false },
-  { id: '2-3', source: '2', target: '3', type: 'smoothstep', animated: true, selected: false },
-  { id: '2-4', source: '2', target: '4', type: 'smoothstep', animated: true, selected: false },
+const initialEdges = [{ id: '1-2', source: '1', target: '2', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
+  { id: '2-3', source: '2', target: '3', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
+  { id: '2-4', source: '2', target: '4', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
 
-  { id: '3-4', source: '3', target: '4', type: 'smoothstep', animated: true, selected: false },
-  { id: '4-5', source: '4', target: '5', type: 'smoothstep', animated: true, selected: false },
-  { id: '5-6', source: '5', target: '6', type: 'smoothstep', animated: true, selected: false },
-  { id: '6-7', source: '6', target: '7', type: 'smoothstep', animated: true, selected: false },
-  { id: '7-8', source: '7', target: '8', type: 'smoothstep', animated: true, selected: false },
-  { id: '8-6', source: '8', target: '6', type: 'smoothstep', animated: true, selected: false },
-  { id: '6-9', source: '6', target: '9', type: 'smoothstep', animated: true, selected: false },
-  { id: '9-10', source: '9', target: '10', type: 'smoothstep', animated: true, selected: false },
-  { id: '10-11', source: '10', target: '11', type: 'smoothstep', animated: true, selected: false },
+  { id: '3-4', source: '3', target: '4', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
+  { id: '4-5', source: '4', target: '5', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
+  { id: '5-6', source: '5', target: '6', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
+  { id: '6-7', source: '6', target: '7', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
+  { id: '7-8', source: '7', target: '8', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
+  { id: '8-6', source: '8', target: '6', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
+  { id: '6-9', source: '6', target: '9', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
+  { id: '9-10', source: '9', target: '10', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
+  { id: '10-11', source: '10', target: '11', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
   
-  { id: '1-11', source: '1', target: '11', type: 'smoothstep', animated: true, selected: false },
-  { id: '11-12', source: '11', target: '12', type: 'smoothstep', animated: true, selected: false },
+  { id: '1-11', source: '1', target: '11', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
+  { id: '11-12', source: '11', target: '12', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+      type: MarkerType.Arrow,
+    } },
 
 
 
