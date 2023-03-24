@@ -4,7 +4,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'cal': ['Cal Sans', 'sans-serif']
+        'space': ['Space Grotesk', 'sans-serif'],
+        'cal': ['Cal Sans', 'sans-serif'],
+        'open-sans': ['Open sans', 'sans-serif']
       },
     },
   },
