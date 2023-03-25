@@ -8,6 +8,8 @@ export const selector = (state: RFState) => ({
     onNodesChange: state.onNodesChange,
     onEdgesChange: state.onEdgesChange,
     onConnect: state.onConnect,
+    removeSuggestionNodesExceptClicked: state.removeSuggestionNodesExceptClicked,
+    changeNodeType: state.changeNodeType
   });
 
 const initialEdges = [{ id: '1-2', source: '1', target: '2', type: 'smoothstep', animated: true, selected: false, markerEnd: {
@@ -59,13 +61,42 @@ const initialEdges = [{ id: '1-2', source: '1', target: '2', type: 'smoothstep',
 
 ];
 
+
+const Edges = [{
+  id: 'edge-1-2',
+  source: '1',
+  target: '2',
+  label: '0.60',
+  className: 'normal-edge',
+  type: "smoothstep",
+  animated: true
+},
+{
+  id: 'edge-1-3',
+  source: '1',
+  target: '3',
+  label: '0.20',
+  className: 'normal-edge',
+  type: "smoothstep",
+  animated: true
+},
+{
+  id: 'edge-1-4',
+  source: '1',
+  target: '4',
+  label: '0.20',
+  className: 'normal-edge',
+  type: "smoothstep",
+  animated: true
+}]
+
 const initialNodes: Node[] = [
   {
     id: '1',
     data: { label: 'Entry' },
     sourcePosition: Position.Right,
     position: { x: 0, y: 0 },
-    type: 'input',
+  
     selected: false,
     width: 200,
     height: 100
@@ -78,6 +109,7 @@ const initialNodes: Node[] = [
     position: { x: 100, y: 100 },
     selected: false,
     width: 200,
+    type: 'suggestionNode',
     height: 100
     
   },
@@ -88,6 +120,7 @@ const initialNodes: Node[] = [
     sourcePosition: Position.Right,
     position: { x: 200, y: 100 },
     selected: false,
+    type: 'suggestionNode',
     width: 200,
     height: 100
   },
@@ -99,6 +132,7 @@ const initialNodes: Node[] = [
     position: { x: 300, y: 100 },
     selected: false,
     width: 200,
+    type: 'suggestionNode',
     height: 100
   },
   {
@@ -186,7 +220,7 @@ const initialNodes: Node[] = [
 
 export const useGraphStore = create<RFState>((set, get) => ({
     nodes: initialNodes,
-  edges: initialEdges,
+  edges: Edges,
   onNodesChange: (changes: NodeChange[]) => {
       set({
         nodes: applyNodeChanges(changes, get().nodes),
@@ -217,6 +251,19 @@ export const useGraphStore = create<RFState>((set, get) => ({
         edges: [],
         nodes: []
       })
+    },
+    removeSuggestionNodesExceptClicked: (id: string) => {
+      set({
+
+        nodes: get().nodes.filter(node => node.type != "suggestionNode" || node.id == id)
+      })
+    },
+    changeNodeType: (id: string, type: string) => {
+      const index = get().nodes.findIndex(node => node.id == id)
+      get().nodes[index]!.type = type
+      set({
+        nodes: get().nodes
+      })
     }
 }));
   
@@ -229,6 +276,8 @@ type RFState = {
     removeSelectedNodes: () => void;
     removeSelectedEdges: () => void;
   removeAllNodesEdges: () => void;
+  removeSuggestionNodesExceptClicked: (id: string) => void;
+  changeNodeType: (id: string, type: string) => void;
 };
   
 interface GridState {

@@ -31,32 +31,32 @@ const Home: NextPage = () => {
       </div>
       <div className="mt-24">
 
-      <Footer />
+        <Footer />
       </div>
     </div>
   );
 };
 
 const Footer = () => {
-  return ( 
+  return (
     <div className="bg-[#1D1D1B] w-full h-full pt-8 pb-4 px-8">
       <div className="flex w-full justify-between ">
-      <Link href={""} className="text-white font-bold font-space text-xl ">aufdecken.</Link>
-<div className="text-5xl cursor-pointer transition-all duration-200 hover:text-[#00c488] font-space text-white w-1/2">
-Process discovery in one place.
-</div>
+        <Link href={""} className="text-white font-bold font-space text-xl ">aufdecken.</Link>
+        <div className="text-5xl cursor-pointer transition-all duration-200 hover:text-[#00c488] font-space text-white w-1/2">
+          Process discovery in one place.
+        </div>
       </div>
-<div className="flex justify-center items-center mt-20">
-  <div className="">
-    <ul className="flex items-center text-white  space-x-12 text-md font-light font-cal">
-      <li className="hover:text-[#00c488] transition-all duration-200 ease-in-out cursor-pointer">Impressum</li>
-      <li>|</li>
-      <li className="hover:text-[#00c488] transition-all duration-200 ease-in-out cursor-pointer">Contact</li>
-      <li>|</li>
-      <li className="hover:text-[#00c488] transition-all duration-200 ease-in-out cursor-pointer">About</li>
-    </ul>
-  </div>
-</div>
+      <div className="flex justify-center items-center mt-20">
+        <div className="">
+          <ul className="flex items-center text-white  space-x-12 text-md font-light font-cal">
+            <li className="hover:text-[#00c488] transition-all duration-200 ease-in-out cursor-pointer">Impressum</li>
+            <li>|</li>
+            <li className="hover:text-[#00c488] transition-all duration-200 ease-in-out cursor-pointer">Contact</li>
+            <li>|</li>
+            <li className="hover:text-[#00c488] transition-all duration-200 ease-in-out cursor-pointer">About</li>
+          </ul>
+        </div>
+      </div>
     </div>
   )
 }
