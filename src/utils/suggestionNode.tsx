@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
-import { Handle, Node, Position } from 'reactflow';
+import { Handle, Position } from 'reactflow';
 
+// eslint-disable-next-line react/display-name
 export default memo(({ data  , isConnectable }: {data: {label: string}, isConnectable: boolean}) => {
   return (
     <div className='bg-white border-black border-[1px] p-4 rounded opacity-20 hover:opacity-70'>

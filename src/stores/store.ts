@@ -134,87 +134,7 @@ const initialNodes: Node[] = [
     width: 200,
     type: 'suggestionNode',
     height: 100
-  },
-  {
-    id: '5',
-    data: { label: 'confirm travel expense report' },
-    targetPosition: Position.Left,
-    sourcePosition: Position.Right,
-    position: { x: 500, y: 200 },
-    selected: false,
-    width: 200,
-    height: 100
-  },
-  {
-    id: '6',
-    data: { label: 'decide on travel expense approval' },
-    targetPosition: Position.Left,
-    sourcePosition: Position.Right,
-    position: { x: 500, y:300 },
-    selected: false,
-    width: 200,
-    height: 100
-  },
-  {
-    id: '7',
-    data: { label: 'send request for travel expesne correction' },
-    targetPosition: Position.Left,
-    sourcePosition: Position.Right,
-    position: { x: 600, y:300 },
-    selected: false,
-    width: 200,
-    height: 100
-  },
-  {
-    id: '8',
-    data: { label: 'correct ravel expense report' },
-    targetPosition: Position.Left,
-    sourcePosition: Position.Top,
-    position: { x: 600, y:400 },
-    selected: false,
-    width: 200,
-    height: 100
-  },
-  {
-    id: '9',
-    data: { label: 'send original documents to archive' },
-    targetPosition: Position.Left,
-    sourcePosition: Position.Right,
-    position: { x: 600, y:500 },
-    selected: false,
-    width: 200,
-    height: 100
-  },
-  {
-    id: '10',
-    data: { label: 'calculate payments' },
-    targetPosition: Position.Left,
-    sourcePosition: Position.Right,
-    position: { x: 600, y:600 },
-    selected: false,
-    width: 200,
-    height: 100
-  },
-  {
-    id: '11',
-    data: { label: 'pay expenses' },
-    targetPosition: Position.Left,
-    sourcePosition: Position.Right,
-    position: { x: 600, y:700 },
-    selected: false,
-    width: 200,
-    height: 100
-  },
-  {
-    id: '12',
-    data: { label: 'exit' },
-    targetPosition: Position.Left,
-    sourcePosition: Position.Right,
-    position: { x: 800, y:700 },
-    selected: false,
-      width: 200,
-    height: 100
-  },
+  }
 
 ];
 
@@ -253,9 +173,13 @@ export const useGraphStore = create<RFState>((set, get) => ({
       })
     },
     removeSuggestionNodesExceptClicked: (id: string) => {
+      const nodesToRemove = get().nodes.filter(node => node.type == "suggestionNode" && node.id != id)
+      const edgesToRemove = get().edges.filter(edge => nodesToRemove.some(node => node.id == edge.source || node.id == edge.target))
+      
       set({
 
-        nodes: get().nodes.filter(node => node.type != "suggestionNode" || node.id == id)
+        nodes: get().nodes.filter(node => node.type != "suggestionNode" || node.id == id),
+        edges: get().edges.filter(edge => !edgesToRemove.some(edgeToRemove => edgeToRemove.id == edge.id)) 
       })
     },
     changeNodeType: (id: string, type: string) => {

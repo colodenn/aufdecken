@@ -5,7 +5,8 @@ import type { ElkNode } from "elkjs"
 const elk = new ELK();
 
 export const sortLayout = async (nodes: Node[], edges: Edge[]) => {
-
+    console.log("nodes", nodes);
+    console.log("edges", edges);
     const graph = {
         id: "root",
         layoutOptions: { 'elk.algorithm': 'layered'},
