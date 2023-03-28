@@ -4,7 +4,7 @@ import { Handle, Position } from 'reactflow';
 // eslint-disable-next-line react/display-name
 export default memo(({ data  , isConnectable }: {data: {label: string}, isConnectable: boolean}) => {
   return (
-    <div className='bg-white border-black border-[1px] p-4 rounded opacity-20 hover:opacity-70'>
+    <div className='bg-white border-black border-[1px] p-[10px] w-[150px] text-center rounded opacity-20 hover:opacity-70'>
       <Handle
         type="target"
         position={Position.Left}

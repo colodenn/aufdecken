@@ -1,61 +1,92 @@
-import { applyNodeChanges, applyEdgeChanges, addEdge, Position, MarkerType } from "reactflow";
+import { applyNodeChanges, applyEdgeChanges, addEdge, Position, MarkerType, NodeAddChange } from "reactflow";
 import { create } from "zustand";
-import type { Node , NodeChange, EdgeChange, Connection, Edge, OnNodesChange, OnEdgesChange, OnConnect} from "reactflow"
+import type { Node, NodeChange, EdgeChange, Connection, Edge, OnNodesChange, OnEdgesChange, OnConnect } from "reactflow"
+import { v4 } from "uuid";
 
 export const selector = (state: RFState) => ({
-    nodes: state.nodes,
-    edges: state.edges,
-    onNodesChange: state.onNodesChange,
-    onEdgesChange: state.onEdgesChange,
-    onConnect: state.onConnect,
-    removeSuggestionNodesExceptClicked: state.removeSuggestionNodesExceptClicked,
-    changeNodeType: state.changeNodeType
-  });
+  nodes: state.nodes,
+  edges: state.edges,
+  onNodesChange: state.onNodesChange,
+  onEdgesChange: state.onEdgesChange,
+  onConnect: state.onConnect,
+  removeSuggestionNodesExceptClicked: state.removeSuggestionNodesExceptClicked,
+  changeNodeType: state.changeNodeType,
+  calculateSuggestionNodes: state.calculateSuggestionNodes,
+  turnOffAnimationForEdgesConnectedToNode: state.turnOffAnimationForEdgesConnectedToNode
+});
 
-const initialEdges = [{ id: '1-2', source: '1', target: '2', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  { id: '2-3', source: '2', target: '3', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  { id: '2-4', source: '2', target: '4', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
+const initialEdges = [{
+  id: '1-2', source: '1', target: '2', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+{
+  id: '2-3', source: '2', target: '3', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+{
+  id: '2-4', source: '2', target: '4', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
 
-  { id: '3-4', source: '3', target: '4', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  { id: '4-5', source: '4', target: '5', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  { id: '5-6', source: '5', target: '6', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  { id: '6-7', source: '6', target: '7', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  { id: '7-8', source: '7', target: '8', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  { id: '8-6', source: '8', target: '6', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  { id: '6-9', source: '6', target: '9', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  { id: '9-10', source: '9', target: '10', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  { id: '10-11', source: '10', target: '11', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  
-  { id: '1-11', source: '1', target: '11', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
-  { id: '11-12', source: '11', target: '12', type: 'smoothstep', animated: true, selected: false, markerEnd: {
-      type: MarkerType.Arrow,
-    } },
+{
+  id: '3-4', source: '3', target: '4', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+{
+  id: '4-5', source: '4', target: '5', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+{
+  id: '5-6', source: '5', target: '6', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+{
+  id: '6-7', source: '6', target: '7', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+{
+  id: '7-8', source: '7', target: '8', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+{
+  id: '8-6', source: '8', target: '6', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+{
+  id: '6-9', source: '6', target: '9', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+{
+  id: '9-10', source: '9', target: '10', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+{
+  id: '10-11', source: '10', target: '11', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+
+{
+  id: '1-11', source: '1', target: '11', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
+{
+  id: '11-12', source: '11', target: '12', type: 'smoothstep', animated: true, selected: false, markerEnd: {
+    type: MarkerType.Arrow,
+  }
+},
 
 
 
@@ -96,7 +127,7 @@ const initialNodes: Node[] = [
     data: { label: 'Entry' },
     sourcePosition: Position.Right,
     position: { x: 0, y: 0 },
-  
+
     selected: false,
     width: 200,
     height: 100
@@ -111,7 +142,7 @@ const initialNodes: Node[] = [
     width: 200,
     type: 'suggestionNode',
     height: 100
-    
+
   },
   {
     id: '3',
@@ -138,78 +169,176 @@ const initialNodes: Node[] = [
 
 ];
 
+const activityNames = [
+  "Record Goods Receipt",
+  "Record Invoice Receipt",
+  "Vencor creates invoice",
+  "Clear Invoice",
+  "Create Purchase Order Item",
+  "Remove Payment Block",
+  "Record Service Entry Sheet",
+  "Create Purchasse Requisition",
+  "Change Quanittiy",
+  "Cancel Invoice Receipt",
+  "Vendor creates debit memo",
+  "Change price",
+  "Receive Order Confirmation"
+]
+
 export const useGraphStore = create<RFState>((set, get) => ({
-    nodes: initialNodes,
+  nodes: initialNodes,
   edges: Edges,
   onNodesChange: (changes: NodeChange[]) => {
-      set({
-        nodes: applyNodeChanges(changes, get().nodes),
-      });
-    },
-    onEdgesChange: (changes: EdgeChange[]) => {
-      set({
-        edges: applyEdgeChanges(changes, get().edges),
-      });
-    },
-    onConnect: (connection: Connection) => {
-      set({
-        edges: addEdge(connection, get().edges),
-      });
-    },
-    removeSelectedNodes: () => {
-      set({
-        nodes: get().nodes.filter(node => node.selected == false)
-      })
-    },
-    removeSelectedEdges: () => {
-      set({
-        edges: get().edges.filter(edge => edge.selected == false)
-      })
-    },
-    removeAllNodesEdges: () => {
-      set({
-        edges: [],
-        nodes: []
-      })
-    },
-    removeSuggestionNodesExceptClicked: (id: string) => {
-      const nodesToRemove = get().nodes.filter(node => node.type == "suggestionNode" && node.id != id)
-      const edgesToRemove = get().edges.filter(edge => nodesToRemove.some(node => node.id == edge.source || node.id == edge.target))
-      
-      set({
+    set({
+      nodes: applyNodeChanges(changes, get().nodes),
+    });
+  },
+  onEdgesChange: (changes: EdgeChange[]) => {
+    set({
+      edges: applyEdgeChanges(changes, get().edges),
+    });
+  },
+  onConnect: (connection: Connection) => {
+    set({
+      edges: addEdge(connection, get().edges),
+    });
+  },
+  removeSelectedNodes: () => {
+    set({
+      nodes: get().nodes.filter(node => node.selected == false)
+    })
+  },
+  removeSelectedEdges: () => {
+    set({
+      edges: get().edges.filter(edge => edge.selected == false)
+    })
+  },
+  removeAllNodesEdges: () => {
+    set({
+      edges: [],
+      nodes: []
+    })
+  },
+  removeSuggestionNodesExceptClicked: (id: string) => {
+    const nodesToRemove = get().nodes.filter(node => node.type == "suggestionNode" && node.id != id)
+    const edgesToRemove = get().edges.filter(edge => nodesToRemove.some(node => node.id == edge.source || node.id == edge.target))
 
-        nodes: get().nodes.filter(node => node.type != "suggestionNode" || node.id == id),
-        edges: get().edges.filter(edge => !edgesToRemove.some(edgeToRemove => edgeToRemove.id == edge.id)) 
+    set({
+
+      nodes: get().nodes.filter(node => node.type != "suggestionNode" || node.id == id),
+      edges: get().edges.filter(edge => !edgesToRemove.some(edgeToRemove => edgeToRemove.id == edge.id))
+    })
+  },
+  changeNodeType: (id: string, type: string) => {
+    const index = get().nodes.findIndex(node => node.id == id)
+    get().nodes[index]!.type = type
+
+    set({
+      nodes: get().nodes
+    })
+  },
+  turnOffAnimationForEdgesConnectedToNode: (nodeId: string) => {
+    set({
+      edges: get().edges.map(edge => {
+        if (edge.target == nodeId) {
+          edge.animated = false
+          edge.label = ""
+        }
+        return edge
+
       })
+    })
+  },
+
+  calculateSuggestionNodes: (id: string) => {
+    const clickedNode = get().nodes.find(node => node.id == id)
+    if (typeof clickedNode == "undefined" || typeof clickedNode == null || typeof clickedNode.width == "undefined" || typeof clickedNode.width == null) return;
+
+    const change = [{
+      item: {
+        id: v4(),
+        data: { label: activityNames[Math.floor(Math.random() * activityNames.length)] },
+        position: { x: clickedNode.position.x + 40 + (clickedNode.width ? clickedNode.width : 150), y: clickedNode.position.y - 100 },
+        targetPosition: Position.Left,
+        sourcePosition: Position.Right,
+        type: "suggestionNode"
+      },
+      type: "add"
     },
-    changeNodeType: (id: string, type: string) => {
-      const index = get().nodes.findIndex(node => node.id == id)
-      get().nodes[index]!.type = type
-      set({
-        nodes: get().nodes
-      })
+    {
+      item: {
+        id: v4(),
+        data: { label: activityNames[Math.floor(Math.random() * activityNames.length)] },
+        position: { x: clickedNode.position.x + 40 + (clickedNode.width ? clickedNode.width : 150), y: clickedNode.position.y },
+        targetPosition: Position.Left,
+        sourcePosition: Position.Right,
+        type: "suggestionNode"
+      },
+      type: "add"
+    },
+    {
+      item: {
+        id: v4(),
+        data: { label: activityNames[Math.floor(Math.random() * activityNames.length)] },
+        position: { x: clickedNode.position.x + 40 + (clickedNode.width ? clickedNode.width : 150), y: clickedNode.position.y + 100 },
+        targetPosition: Position.Left,
+        sourcePosition: Position.Right,
+        type: "suggestionNode"
+      },
+      type: "add"
     }
+    ] as NodeAddChange[]
+
+    const edgeChange = change.map((node) => {
+      if(typeof get().nodes == "undefined" || get().nodes.length == 0) return;
+      const id = get().nodes[Math.floor(Math.random() * get().nodes.length)]?.id
+      return {
+        item: {
+          id: v4(),
+          source: id,
+          target: node.item.id,
+          label: '0.33',
+          className: 'normal-edge',
+          type: "smoothstep",
+          animated: true
+        },
+        type: "add"
+      }
+    }) as EdgeChange[]
+
+    console.log(edgeChange);
+
+
+    set({
+      nodes: applyNodeChanges(change, get().nodes),
+      edges: applyEdgeChanges(edgeChange, get().edges)
+    })
+  }
 }));
-  
+
 type RFState = {
-    nodes: Node[];
-    edges: Edge[];
-    onNodesChange: OnNodesChange;
-    onEdgesChange: OnEdgesChange;
-    onConnect: OnConnect;
-    removeSelectedNodes: () => void;
-    removeSelectedEdges: () => void;
+  nodes: Node[];
+  edges: Edge[];
+  onNodesChange: OnNodesChange;
+  onEdgesChange: OnEdgesChange;
+  onConnect: OnConnect;
+  removeSelectedNodes: () => void;
+  removeSelectedEdges: () => void;
   removeAllNodesEdges: () => void;
   removeSuggestionNodesExceptClicked: (id: string) => void;
   changeNodeType: (id: string, type: string) => void;
+  calculateSuggestionNodes: (id: string) => void;
+  turnOffAnimationForEdgesConnectedToNode: (id: string) => void;
 };
-  
+
+
+
 interface GridState {
-    gridOn: boolean,
-    toggleGrid: () => void
-  }
-  
-  export const useGridStore = create<GridState>()((set) => ({
-    gridOn: true,
-    toggleGrid: () => set((state) => ({ gridOn: !state.gridOn })),
-  }))
+  gridOn: boolean,
+  toggleGrid: () => void
+}
+
+export const useGridStore = create<GridState>()((set) => ({
+  gridOn: true,
+  toggleGrid: () => set((state) => ({ gridOn: !state.gridOn })),
+}))
