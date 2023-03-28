@@ -6,7 +6,7 @@ interface Settingsbar {
     toggleSettingsBar: (toggle: boolean) => void
 }
 
-export const useSettingsbarStore = create<Settingsbar>()((set, get) => ({
+export const useSettingsbarStore = create<Settingsbar>()((set) => ({
     settingsBarOpen: false,
     toggleSettingsBar:  (toggle) => set(() => ({ settingsBarOpen: toggle })),
   }))

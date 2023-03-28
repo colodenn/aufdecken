@@ -8,7 +8,6 @@ import {
 import { useState } from "react";
 
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-import { clsx } from "clsx";
 
 const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);

@@ -1,6 +1,6 @@
 import type { Layout } from "@components/dashboard/layout";
 import Logo from "@components/misc/logo";
-import { ArrowLeftIcon, CaretLeftIcon } from "@radix-ui/react-icons";
+import { CaretLeftIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
 const CockpitLayout = (props: Layout) => {

@@ -47,7 +47,7 @@ const Flow = () => {
   const snapGrid: [number, number] = [20, 20];
   const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
   
-  const onNodeClick = (event:any, node:Node) => {
+  const onNodeClick = (event: any, node:Node) => {
     if(node.type == "suggestionNode") {
       removeSuggestionNodesExceptClicked(node.id);
 

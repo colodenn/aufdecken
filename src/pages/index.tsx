@@ -1,4 +1,3 @@
-import Logo from "@components/misc/logo";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { type NextPage } from "next";
 import Image from "next/image";
